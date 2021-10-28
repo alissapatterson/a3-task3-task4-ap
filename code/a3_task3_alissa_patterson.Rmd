@@ -1,0 +1,37 @@
+---
+title: "a3_task3_alissa_patterson.Rmd"
+author: "Alissa Patterson"
+date: "10/28/2021"
+output: html_document
+---
+
+## Setup
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(janitor)
+library(here)
+library(lubridate)
+```
+
+## Read in the data
+
+```{r}
+urchins <- read_csv(here("data","urchins.csv"))
+urchins_clean <- clean_names(urchins)
+```
+
+## Data visualization
+```{r}
+ggplot(urchins_clean, 
+       aes(x = size)) +
+  geom_histogram(bins=11,
+                 aes(fill = common_name), 
+          show.legend = FALSE ) + 
+  facet_wrap(~ common_name) +
+    scale_fill_manual(values = c("purple", "red")) +
+  labs(title = "Size Comparison of Purple and Red Sea Urchins", x = "Size (cm)", y = "Number of Sea Urchins")
+  
+```
+

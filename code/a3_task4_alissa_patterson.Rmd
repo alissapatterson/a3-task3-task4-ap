@@ -1,0 +1,97 @@
+---
+title: "Naples Reef Purple Urchins"
+author: "Alissa Patterson"
+date: "10/29/2021"
+output: html_document
+---
+
+## Overview
+### This code wrangles, analyses, and visualizes data on Naples Reef observations for purple urchins observed in 2010.
+
+
+Data: Reed, D. 2020. SBC LTER: Reef: Long-term experiment: Kelp removal: Urchin size frequency distribution ver 20. Environmental Data Initiative. https://doi.org/10.6073/pasta/5a1e9ef03aa47bd2225c0bb98a02a63b. 
+
+## Setup
+## Attach packages
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(janitor)
+library(here)
+library(lubridate)
+library(knitr)
+library(kableExtra)
+```
+
+# Read in the data
+
+```{r}
+urchins <- read_csv(here("data","urchins.csv"))
+urchins <- clean_names(urchins)
+```
+
+# Data wrangling
+
+Select only the Naples Reef observations for purple urchins in 2010. 
+
+```{r}
+naples_urchins <- urchins %>% 
+  filter(site == "NAPL" &  common_name == "Purple Urchin") %>%
+  mutate(date = mdy(date)) %>% 
+  mutate(year = year(date)) %>%
+  filter(year == 2010)
+```
+
+
+# Data exploration
+
+```{r}
+ggplot(naples_urchins, aes(size)) +
+  geom_histogram(bins=10) +
+  facet_grid(~ treatment) +
+  theme_minimal() +
+  labs( x = "Size (cm)",
+        caption = "Histogram of purple urchin sizes per treatment Measured to the nearest 0.5 cm") +
+  theme(plot.caption = element_text(hjust = 0))
+
+ggplot(naples_urchins, aes(sample=size)) +
+  geom_qq() +
+  stat_qq_line() +
+  facet_grid(~ treatment) +
+  theme_minimal() +
+  labs( y = "Size (cm)",
+        x = "Theoretical",
+        caption = "QQ-plot of purple urchin sizes per treatment") +
+  theme(plot.caption = element_text(hjust = 0))
+```
+
+As we can observe in both plots, our data distribution is not normal. In the histograms we can see a subtle asymmetry of the sizes distribution for both treatments, slightly skewed to the right. This is also reflected in the QQ-plot, were we can see that the data does not follow the normal distribution. Both ends of the data do not fit the normal distribution line. In both cases, annual and control samples, present similar distributions.
+
+
+# Descriptive statistics
+
+Create a finalized summary table that contains some statistics for annual and control samples.
+
+```{r}
+naples_urchins_summary <- naples_urchins %>% 
+  group_by(treatment) %>% 
+  summarize(mean=mean(size), median=median(size), sd=sd(size), n=n())
+
+kable(naples_urchins_summary,
+      digits = 2,
+      col.names = c("Treatment",
+                    "Mean (cm)",
+                    "Median (cm)",
+                    "Standar deviation (cm)",
+                    "Sample size"),
+      caption = "Summary statistics by treatment for Naples Reef's purple urchins in 2010 samples") %>% 
+  kable_styling(full_width = FALSE)
+```
+
+As already mention in the previous section, there is no big differences between `control` samples -where the kelp was not removed- and `annual` -with kelp removal- sections of Naples Reef in 2010. Mean, median and standard deviation are similar. However, although it is beyond the scope of this task, to confirm the existence of differences it would be appropriate to apply a t-test.
+```
+
+
+
+

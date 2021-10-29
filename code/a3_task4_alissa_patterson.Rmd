@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ## Overview
-### This code wrangles, analyses, and visualizes data on Naples Reef observations for purple urchins observed in 2010.
+### This code wrangles, analyses, and visualizes data of Naples Reef observations for purple urchins observed in 2010.
 
 
 Data: Reed, D. 2020. SBC LTER: Reef: Long-term experiment: Kelp removal: Urchin size frequency distribution ver 20. Environmental Data Initiative. https://doi.org/10.6073/pasta/5a1e9ef03aa47bd2225c0bb98a02a63b. 
@@ -52,7 +52,7 @@ ggplot(naples_urchins, aes(size)) +
   facet_grid(~ treatment) +
   theme_minimal() +
   labs( x = "Size (cm)",
-        caption = "Histogram of purple urchin sizes per treatment Measured to the nearest 0.5 cm") +
+        caption = "Histogram of Purple Urchin Sizes (cm) by Treatment") +
   theme(plot.caption = element_text(hjust = 0))
 
 ggplot(naples_urchins, aes(sample=size)) +
@@ -66,7 +66,7 @@ ggplot(naples_urchins, aes(sample=size)) +
   theme(plot.caption = element_text(hjust = 0))
 ```
 
-As we can observe in both plots, our data distribution is not normal. In the histograms we can see a subtle asymmetry of the sizes distribution for both treatments, slightly skewed to the right. This is also reflected in the QQ-plot, were we can see that the data does not follow the normal distribution. Both ends of the data do not fit the normal distribution line. In both cases, annual and control samples, present similar distributions.
+The data distribution is not normal. In the histograms, the distributions for both treatments are skewed to the right. In the QQ-plot, the data does not follow the normal distribution line. Although the distributions of the treatment and control are very similar, the annual treatment resulted in a high count of urchins sized 3 cm compared to the control. Overall, removing kelp does not appear to have a large effect on the purple urchins.  
 
 
 # Descriptive statistics
@@ -89,8 +89,6 @@ kable(naples_urchins_summary,
   kable_styling(full_width = FALSE)
 ```
 
-As already mention in the previous section, there is no big differences between `control` samples -where the kelp was not removed- and `annual` -with kelp removal- sections of Naples Reef in 2010. Mean, median and standard deviation are similar. However, although it is beyond the scope of this task, to confirm the existence of differences it would be appropriate to apply a t-test.
-```
 
 
 
